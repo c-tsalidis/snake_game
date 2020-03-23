@@ -40,6 +40,11 @@ void draw() {
   fill(255);
   if (isXAxis) headX += speed * xDirection;
   else headY += speed * yDirection;
+  
+  if(headX > width) headX = 0;
+  if(headX < 0) headX = width;
+  if(headY > height) headY = 0;
+  if(headY < 0) headY = height;
   rect(headX, headY, size, size);
   /*
   for (int i = 5 - 1; i > 0; i--) {
