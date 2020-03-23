@@ -60,9 +60,10 @@ void draw() {
 
 void checkFood() {
   // println(foodX, foodY);
-  if (headX >= foodX && headX <= (foodX + size) && headY >= foodY && headY <= (foodY + size)) {
-    foodX = (int)random(0, width);
-    foodY = (int)random(0, height);
+  // if (foodX >= headX && foodX <= (headX + size) && foodY >= headY && foodY <= (headY + size)) {
+    if(abs(foodX-headX) <= size && abs(foodY- headY) <= size) {
+    foodX = (int)random(0, width - size);
+    foodY = (int)random(0, height - size);
     Body b = new Body(headX, headY, size);
     body.add(b);
     bodyCount++;
