@@ -28,11 +28,12 @@ void setup() {
   isXAxis = true;
 
   body = new ArrayList<Body>();
-
+  /*
   for (int i = 0; i < 5; i++) {
     Body b = new Body(headX, headY, size);
     body.add(b);
   }
+  */
 }
 
 void draw() {
@@ -46,21 +47,25 @@ void draw() {
   if(headY > height) headY = 0;
   if(headY < 0) headY = height;
   rect(headX, headY, size, size);
-  /*
-  for (int i = 5 - 1; i > 0; i--) {
+  
+  if(body.size() > 0) {
+    body.get(0).x = headX;
+    body.get(0).y = headY;
+  }
+  
+  for (int i = bodyCount - 1; i > 0; i--) {
     body.get(i).x = body.get(i-1).x;
     body.get(i).y = body.get(i-1).y;
     // use body parts class for the body --> x, y, size
-    rect(body.get(i).x, body.get(i).y, 25, 25);
+    rect(body.get(i).x, body.get(i).y, size, size);
   }
-  */
+  
 
   checkFood();
 }
 
 void checkFood() {
   // println(foodX, foodY);
-  // if (foodX >= headX && foodX <= (headX + size) && foodY >= headY && foodY <= (headY + size)) {
     if(abs(foodX-headX) <= size && abs(foodY- headY) <= size) {
     foodX = (int)random(0, width - size);
     foodY = (int)random(0, height - size);
