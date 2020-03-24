@@ -1,10 +1,7 @@
 // Snake game
 int xDirection = 1, yDirection = 1; // x and y directions of the snake (-1 || 1)
-int headX = 0, headY = 0; // coordinates of the head in the x and y axis
 int speed = 5;
 int size = 10;
-
-int foodX, foodY;
 
 boolean isDead = false;
 boolean isXAxis = true;
@@ -12,17 +9,19 @@ boolean isXAxis = true;
 int bodyCount;
 ArrayList<Body> body;
 
-int xCounter = 0, yCounter = 0;
+int xCounter = 0, yCounter = 0; // head grid counters --> to move based on the grid system
 
 Grid grid;
+Head head;
+Food food;
 
 void setup() {
   size(600, 600);
   background(0);
   noStroke();
   grid = new Grid(size);
-  foodX = width / 2;
-  foodY = height / 2;
+  head = new Head();
+  food = new Food();
   body = new ArrayList<Body>();
   frameRate(30);
 }
@@ -30,23 +29,13 @@ void setup() {
 void draw() {
   background(0);
   fill(255);
-  if (isXAxis){
-    xCounter += xDirection;
-    if(xCounter >= grid.x.length) isDead = true;
-    if (xCounter < grid.x[0]) isDead = true;
-    if(!isDead) headX = grid.x[xCounter];
-  }
-  else {
-    yCounter += yDirection;
-    if(yCounter >= grid.y.length) isDead = true;
-    if (yCounter < grid.y[0]) isDead = true;
-    if(!isDead) headY = grid.y[yCounter];
-  }
-  rect(headX, headY, size, size);
+  head.move();
+  head.display();
 
+  // display and update the position of the body parts
   if (body.size() > 0) {
-    body.get(0).x = headX;
-    body.get(0).y = headY;
+    body.get(0).x = head.x;
+    body.get(0).y = head.y;
     for (int i = bodyCount - 1; i > 0; i--) {
       body.get(i).x = body.get(i-1).x;
       body.get(i).y = body.get(i-1).y;
@@ -55,32 +44,17 @@ void draw() {
   }
 
   // if the head hits any part of its body, it's game over
-  for (int i = 0; i < body.size(); i++) {
-    if (abs(body.get(i).x - headX) < size && abs(body.get(i).y - headY) < size) {
+  for (int i = 1; i < body.size(); i++) {
+    Body b = body.get(i);
+    if (b.x == head.x && b.y == head.y) {
       // println(body.get(i).x, headX, body.get(i).y, headY);
       // gameOver();
     }
   }
 
-  checkFood();
+  food.display();
+  food.check();
   grid.display();
-
-}
-
-void checkFood() {
-  // println(foodX, foodY);
-  if (abs(foodX - headX) <= size && abs(foodY - headY) <= size) {
-    foodX = (int)random(0, width - size);
-    foodY = (int)random(0, height - size);
-    Body b;
-    if(body.size() == 0) b = new Body(headX + size * (-xDirection), headY + size * (-yDirection));
-    else b = new Body(body.get(body.size() - 1).x + size * (-xDirection), body.get(body.size() - 1).y + size * (-yDirection));
-    body.add(b);
-    bodyCount++;
-    println(b.x, headX, b.y, headY);
-    println("Eaten: " + bodyCount);
-  }
-  rect(foodX, foodY, size, size);
 }
 
 void gameOver() {
@@ -90,8 +64,14 @@ void gameOver() {
 void reset() {
   body.clear();
   bodyCount = 0;
-  headX = 0;
-  headY = 0;
+  head.x = 0;
+  head.y = 0;
+  isDead = false;
+  xDirection = 1;
+  yDirection = 1;
+  isXAxis = true;
+  xCounter = 0;
+  yCounter = 0;
 }
 
 void keyPressed() {
