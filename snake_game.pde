@@ -1,6 +1,5 @@
 // Snake game
 int xDirection = 1, yDirection = 1; // x and y directions of the snake (-1 || 1)
-int speed = 5;
 int size = 10;
 
 boolean isDead = false;
@@ -29,13 +28,24 @@ void setup() {
 void draw() {
   background(0);
   fill(255);
+  
+  if(isDead) gameOver();
+  
   head.move();
   head.display();
 
   // display and update the position of the body parts
   if (body.size() > 0) {
-    body.get(0).x = head.x;
-    body.get(0).y = head.y;
+    if(isXAxis) {
+      body.get(0).x = grid.x[xCounter - xDirection];
+      body.get(0).y = grid.y[yCounter];
+    }
+    else {
+      body.get(0).x = grid.x[xCounter];
+      body.get(0).y = grid.y[yCounter - yDirection];
+    }
+    rect(body.get(0).x, body.get(0).y, size, size);
+    
     for (int i = bodyCount - 1; i > 0; i--) {
       body.get(i).x = body.get(i-1).x;
       body.get(i).y = body.get(i-1).y;
@@ -48,13 +58,13 @@ void draw() {
     Body b = body.get(i);
     if (b.x == head.x && b.y == head.y) {
       // println(body.get(i).x, headX, body.get(i).y, headY);
-      // gameOver();
+      gameOver();
     }
   }
 
   food.display();
   food.check();
-  grid.display();
+  // grid.display();
 }
 
 void gameOver() {

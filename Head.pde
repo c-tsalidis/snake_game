@@ -24,6 +24,5 @@ class Head {
       if (yCounter < grid.y[0]) isDead = true;
       if (!isDead) y = grid.y[yCounter];
     }
-    if(isDead) gameOver();
   }
 }
