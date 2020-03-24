@@ -1,11 +1,10 @@
 class Body{
   // variables
-  int x, y, size;
+  int x, y;
   
   // constructor
-  Body(int _x, int _y, int _size) {
+  Body(int _x, int _y) {
     x = _x;
     y = _y;
-    size = _size;
   }
 }
