@@ -1,16 +1,18 @@
 // Snake game
-int xDirection, yDirection; // x and y directions of the snake (-1 || 1)
-int headX, headY; // coordinates of the head in the x and y axis
-int speed;
-int size;
+int xDirection = 1, yDirection = 1; // x and y directions of the snake (-1 || 1)
+int headX = 0, headY = 0; // coordinates of the head in the x and y axis
+int speed = 5;
+int size = 10;
 
 int foodX, foodY;
 
-boolean isDead;
-boolean isXAxis;
+boolean isDead = false;
+boolean isXAxis = true;
 
 int bodyCount;
 ArrayList<Body> body;
+
+int xCounter = 0, yCounter = 0;
 
 Grid grid;
 
@@ -18,32 +20,28 @@ void setup() {
   size(600, 600);
   background(0);
   noStroke();
-  xDirection = 1;
-  yDirection = 1;
-  headX = 0;
-  headY = 0;
-  speed = 5;
-  size = 10;
+  grid = new Grid(size);
   foodX = width / 2;
   foodY = height / 2;
-  isDead = false;
-  isXAxis = true;
-  
-  grid = new Grid(size);
-  
   body = new ArrayList<Body>();
+  frameRate(30);
 }
 
 void draw() {
   background(0);
   fill(255);
-  if (isXAxis) headX += speed * xDirection;
-  else headY += speed * yDirection;
-
-  if (headX > width) headX = 0;
-  if (headX < 0) headX = width;
-  if (headY > height) headY = 0;
-  if (headY < 0) headY = height;
+  if (isXAxis){
+    xCounter += xDirection;
+    if(xCounter >= grid.x.length) isDead = true;
+    if (xCounter < grid.x[0]) isDead = true;
+    if(!isDead) headX = grid.x[xCounter];
+  }
+  else {
+    yCounter += yDirection;
+    if(yCounter >= grid.y.length) isDead = true;
+    if (yCounter < grid.y[0]) isDead = true;
+    if(!isDead) headY = grid.y[yCounter];
+  }
   rect(headX, headY, size, size);
 
   if (body.size() > 0) {
