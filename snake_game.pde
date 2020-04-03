@@ -1,6 +1,6 @@
 // Snake game
 int xDirection = 1, yDirection = 1; // x and y directions of the snake (-1 || 1)
-int size = 10;
+int size = 20;
 
 boolean isDead = false;
 boolean isXAxis = true;
@@ -8,26 +8,28 @@ boolean isXAxis = true;
 int bodyCount;
 ArrayList<Body> body;
 
-int xCounter = 0, yCounter = 0; // head grid counters --> to move based on the grid system
+int xCounter, yCounter; // head grid counters --> to move based on the grid system
 
 Grid grid;
 Head head;
 Food food;
 
 void setup() {
-  size(600, 600);
+  // size(600, 600);
+  fullScreen();
   background(0);
   noStroke();
   grid = new Grid(size);
   head = new Head();
   food = new Food();
   body = new ArrayList<Body>();
-  frameRate(30);
+  frameRate(45);
 }
 
 void draw() {
   background(0);
   fill(255);
+  smooth(8);
   
   if(isDead) gameOver();
   
